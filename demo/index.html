@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
@@ -8,88 +8,111 @@
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
     <script src="./common.js"></script>
+    
+    <!-- 引入vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
-    <style>
-      .content {
-        display: flex;
-        flex-direction: column;
-        background-color: aqua;
-        padding: 10px;
-      }
-      .start {
-        height: 40px;
-        margin-top: 10px;
-      }
-      #msg_txt {
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
-
-      a {
-        color: brown;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        padding-left: 10px;
-      }
-    </style>    
+    <!-- 引入 element ui -->
+    <link href="https://cdn.bootcss.com/element-ui/2.4.5/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/element-ui/2.4.5/index.js"></script>   
   </head>
   <body>
-    <div class="content">
-      <!-- <text>web test</text> -->      
-      <input class="start" onclick="start()" type="button" value="START2" />
-      <text id="msg_txt">msg</text>
+    <div id="app">
+      <el-header class="header">
+        <strong>XRouter Demo</strong>
+      </el-header>
+      <el-main class="main">
+        <div class="btn-sec">
+          <el-button type="primary" plain @click="startLaunch()">LAUNCH</el-button>
+          <el-button id="to_market" type="primary" plain @click="toMarket()">TO MARKET</el-button>
+        </div>        
+      </el-main>
     </div>
 
     <script>
-
-      var DEEP_LINK_MI_WEATHER = "weather://details/webview?url=http://haowen-test.test.net/mi_market.html&push=false";
-      var DEEP_LINK_MI_BROWSER = "";
-      var DEEP_LINK_MI_MARKET = "mimarket://details?id=com.xunmeng.pinduoduo";
-      var DEEP_LINK_HW_BROWSER = "hwbrowser://com.huawei.browser/parameter?url=hwwebview%3a%2f%2fnewtab%2fnewsfeed%2fdetail%3furl%3dhttp%3a%2f%2faxue-mobile.test.net%2fhuawei%2ftest.html%253fc%253d1%26isfrompush%3dtrue%26isfromfavorite%3dtrue%26ctype%3dnews%26dtype%3d1";
-      
-      var msg_txt = document.getElementById("msg_txt");
-      msg_txt.innerText = "user-agent: " + window.navigator.userAgent;
-  
-
-      // init();
-      // var wxrouter = new wxrouter();
-  
-      /*---------------------- function ----------------*/
-
-      function init() {
-        registerMessageListener();
-        isChannelReady(function(ready) {
-          log(`isReady: ${ready}`);
-        });
-      }
-
-      function start() {
-        console.log('start')
-        // isChannelReady(function(ready) {
-        //   log(`isReady: ${ready}`);
-        // });
-        routerByDeeplink('vivomarket://details?id=com.xingin.xhs');
-        // sendMessage('start')
-        // go2QuickApp()
-      }
-  
-      function go2QuickApp() {
-        var link = DEEP_LINK_MI_WEATHER;
-        wxrouter.launch(link);
-      }
-
-      function registerMessageListener() {
-        system.onmessage = function (data) {
-          msg_txt.innerText = data;
-          console.log("message received: " + data);
-        };
-      }
-
-      function sendMessage(msg) {
-        console.log('sendMessage');
-        system.postMessage('1003');        
-      }
+      let app = new Vue({
+        el: "#app",
+        data: {
+          url: '',
+          jump_url: 'vivomarket://details?id=com.xingin.xhs'
+        },
+        methods: {
+          init() {
+            this.registerMessageListener();
+            isChannelReady(function(ready) {
+              log(`isReady: ${ready}`);
+            });
+            // launch();
+            // routerByDeeplink('');
+          },
+          startLaunch() {
+            log(`startLaunch 4`);
+            launch(this.url, this.jump_url);
+          },
+          toMarket() {
+            routerByDeeplink('vivomarket://details?id=com.xingin.xhs');
+          },
+          registerMessageListener() {
+            system.onmessage = function (data) {
+              msg_txt.innerText = data;
+              console.log("message received: " + data);
+            };
+          },
+          sendMessage(msg) {
+            console.log('sendMessage');
+            system.postMessage('1003');        
+          }
+        },
+        mounted() {
+          this.init()
+        }
+      })
 
     </script>
+
+    <style>
+      #app {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+      }
+      .header {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        margin-top: 20px;
+        /* background-color: azure; */
+        /* height: 100px!important; */
+      }
+      .main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+      }
+      .btn-sec {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+        margin-top: 200px;
+        width: 200px;
+        align-self: center;
+      }
+      #to_market {
+        margin-top: 20px;
+        margin-left: 0px;
+      }
+      strong {
+        font-size: 2.5rem;
+        /* font-weight: 300; */
+        line-height: 1.2;
+        color: #28a745 !important;
+      }
+      small {
+        font-size: 24px;
+        font-weight: 400;
+        color: #6c757d !important;
+      }
+    </style> 
   </body>  
 </html>

@@ -1,6 +1,6 @@
 var DEBUG = true;
-var PKG = "com.qunar.quick";
-var PATH = "Home/Audio";
+var PKG = "com.yumi.wishes";
+var PATH = "common/page/landing";
 
 /////////////////////////
 
@@ -59,11 +59,13 @@ function showDialog(foo, title) {
   
 }
 
-function launch(deeplink){
+function launch(url, jump_url){
+  log(`launch 4,url:${url}; jump_url:${jump_url}`)
   isChannelReady(function(ready) {
     if(ready) {
       var params = {
-        deeplink: deeplink
+        url: url,
+        jump_url: jump_url,
       }
       window.appRouter(PKG, PATH, params);
     } else {
